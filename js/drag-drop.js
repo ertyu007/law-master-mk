@@ -1,67 +1,74 @@
 /**
  * เกม Drag & Drop ความรู้กฎหมายไทย
- * ปรับปรุงใหม่รองรับการกดค้างแล้วลาก (touch and hold drag) บนมือถือและลากด้วย mouse บนคอม
- * ฟังก์ชันหลัก:
- * - รองรับทั้ง mouse และ touch แบบกดค้างแล้วลาก
- * - ตรวจสอบคำตอบ
- * - รีเซ็ตรายการ
- * - เปลี่ยนข้อคำถาม
- * - นับคะแนนและแสดงผล
+ * เวอร์ชันปรับปรุง: เสถียรภาพสูง รองรับทั้งมือถือและคอมพิวเตอร์
+ * การปรับปรุงหลัก:
+ * - เพิ่มการจัดการข้อผิดพลาดอย่างครอบคลุม
+ * - ปรับปรุงการทำงานบนหน้าจอสัมผัส
+ * - ปรับปรุงประสิทธิภาพการลากและวาง
+ * - ป้องกันการรั่วไหลของ memory
  */
 
-// Alert system with custom modals
+// ระบบแจ้งเตือนแบบโมดอล
 const alertSystem = {
   show: function (type, title, message, callback) {
-    const overlay = document.createElement("div");
-    overlay.className = "alert-overlay";
+    try {
+      // ลบ overlay เดิมหากมีอยู่
+      const existingOverlay = document.querySelector('.alert-overlay');
+      if (existingOverlay) {
+        document.body.removeChild(existingOverlay);
+      }
 
-    const alertBox = document.createElement("div");
-    alertBox.className = `alert-box alert-${type}`;
+      const overlay = document.createElement("div");
+      overlay.className = "alert-overlay";
 
-    const icon = document.createElement("div");
-    icon.className = "alert-icon";
+      const alertBox = document.createElement("div");
+      alertBox.className = `alert-box alert-${type}`;
 
-    switch (type) {
-      case "success":
-        icon.textContent = "✓";
-        break;
-      case "warning":
-        icon.textContent = "⚠️";
-        break;
-      case "error":
-        icon.textContent = "✗";
-        break;
-      default:
-        icon.textContent = "ℹ️";
+      const icon = document.createElement("div");
+      icon.className = "alert-icon";
+
+      // เลือกไอคอนตามประเภท
+      const icons = {
+        success: "✓",
+        warning: "⚠️",
+        error: "✗",
+        info: "ℹ️"
+      };
+      icon.textContent = icons[type] || icons.info;
+
+      const alertTitle = document.createElement("div");
+      alertTitle.className = "alert-title";
+      alertTitle.textContent = title;
+
+      const alertMessage = document.createElement("div");
+      alertMessage.className = "alert-message";
+      alertMessage.textContent = message;
+
+      const button = document.createElement("button");
+      button.className = "alert-btn";
+      button.textContent = "ตกลง";
+      button.onclick = function () {
+        document.body.removeChild(overlay);
+        if (typeof callback === 'function') {
+          callback();
+        }
+      };
+
+      alertBox.append(icon, alertTitle, alertMessage, button);
+      overlay.appendChild(alertBox);
+      document.body.appendChild(overlay);
+
+      // เพิ่ม animation ด้วย setTimeout
+      setTimeout(() => overlay.classList.add("active"), 10);
+    } catch (error) {
+      console.error("Error in alert system:", error);
+      // Fallback to native alert
+      alert(`${title}\n${message}`);
     }
-
-    const alertTitle = document.createElement("div");
-    alertTitle.className = "alert-title";
-    alertTitle.textContent = title;
-
-    const alertMessage = document.createElement("div");
-    alertMessage.className = "alert-message";
-    alertMessage.textContent = message;
-
-    const button = document.createElement("button");
-    button.className = "alert-btn";
-    button.textContent = "ตกลง";
-    button.onclick = function () {
-      document.body.removeChild(overlay);
-      if (callback) callback();
-    };
-
-    alertBox.append(icon, alertTitle, alertMessage, button);
-    overlay.appendChild(alertBox);
-    document.body.appendChild(overlay);
-
-    setTimeout(() => {
-      overlay.classList.add("active");
-    }, 10);
-  },
+  }
 };
 
-// Game state
+// สถานะเกม
 const gameState = {
   score: 0,
   answeredQuestions: {
@@ -74,320 +81,487 @@ const gameState = {
   currentQuestionIndex: 0,
 };
 
-// Variables for touch drag handling
+// ตัวแปรสำหรับการลากและวาง
 let dragItem = null;
 let dragClone = null;
 let dragStartX = 0;
 let dragStartY = 0;
 let isTouchDragging = false;
 let longPressTimeout = null;
+let scrollInterval = null;
 
+// เริ่มต้นเกมเมื่อ DOM พร้อม
 document.addEventListener("DOMContentLoaded", initializeGame);
 
 function initializeGame() {
-  setupDragAndDrop();
-  showQuestion(gameState.questionOrder[gameState.currentQuestionIndex]);
-  updateProgressDisplay();
-  updateScoreDisplay();
+  try {
+    setupDragAndDrop();
+    showQuestion(gameState.questionOrder[gameState.currentQuestionIndex]);
+    updateProgressDisplay();
+    updateScoreDisplay();
+  } catch (error) {
+    console.error("Error initializing game:", error);
+    alertSystem.show("error", "ข้อผิดพลาด", "ไม่สามารถเริ่มเกมได้ กรุณารีเฟรชหน้าเว็บ");
+  }
 }
 
 function setupDragAndDrop() {
-  // Mouse drag support (standard HTML5 draggable)
-  document.querySelectorAll(".drag-item").forEach((item) => {
-    item.setAttribute("draggable", true);
-    item.addEventListener("dragstart", handleDragStart);
-    item.addEventListener("dragend", handleDragEnd);
-  });
+  try {
+    // Mouse drag support
+    document.querySelectorAll(".drag-item").forEach((item) => {
+      if (!item) return;
 
-  // Drop zones
-  document.querySelectorAll(".drop-zone").forEach((zone) => {
-    zone.addEventListener("dragover", handleDragOver);
-    zone.addEventListener("drop", handleDrop);
-  });
+      // ลบ event listeners เดิมเพื่อป้องกันการซ้ำซ้อน
+      item.removeEventListener("dragstart", handleDragStart);
+      item.removeEventListener("dragend", handleDragEnd);
+      item.removeEventListener("touchstart", handleTouchStart);
+      item.removeEventListener("touchmove", handleTouchMove);
+      item.removeEventListener("touchend", handleTouchEnd);
+      item.removeEventListener("touchcancel", handleTouchCancel);
 
-  // Touch support for long press drag
-  document.querySelectorAll(".drag-item").forEach((item) => {
-    item.addEventListener("touchstart", handleTouchStart, { passive: false });
-    item.addEventListener("touchmove", handleTouchMove, { passive: false });
-    item.addEventListener("touchend", handleTouchEnd);
-    item.addEventListener("touchcancel", handleTouchCancel);
-  });
+      // ตั้งค่า drag และ touch events ใหม่
+      item.setAttribute("draggable", true);
+      item.addEventListener("dragstart", handleDragStart);
+      item.addEventListener("dragend", handleDragEnd);
+      item.addEventListener("touchstart", handleTouchStart, { passive: false });
+      item.addEventListener("touchmove", handleTouchMove, { passive: false });
+      item.addEventListener("touchend", handleTouchEnd);
+      item.addEventListener("touchcancel", handleTouchCancel);
+    });
 
-  // Support double click to clear answer
-  document.addEventListener("dblclick", handleDoubleClick);
+    // Drop zones
+    document.querySelectorAll(".drop-zone").forEach((zone) => {
+      if (!zone) return;
+
+      zone.removeEventListener("dragover", handleDragOver);
+      zone.removeEventListener("drop", handleDrop);
+      
+      zone.addEventListener("dragover", handleDragOver);
+      zone.addEventListener("drop", handleDrop);
+    });
+
+    // Double click to clear
+    document.removeEventListener("dblclick", handleDoubleClick);
+    document.addEventListener("dblclick", handleDoubleClick);
+  } catch (error) {
+    console.error("Error setting up drag and drop:", error);
+  }
 }
 
 // -------- Mouse drag handlers --------
-
 function handleDragStart(e) {
-  // Transfer data value
-  e.dataTransfer.setData("text/plain", e.target.dataset.value);
-  e.dataTransfer.effectAllowed = "copy";
+  try {
+    if (!e.target || !e.dataTransfer) return;
 
-  // Add dragging class
-  e.target.classList.add("dragging");
+    e.dataTransfer.setData("text/plain", e.target.dataset.value);
+    e.dataTransfer.effectAllowed = "copy";
+    e.target.classList.add("dragging");
+  } catch (error) {
+    console.error("Error in drag start:", error);
+  }
 }
 
 function handleDragEnd(e) {
-  e.target.classList.remove("dragging");
+  try {
+    if (e.target?.classList?.contains("dragging")) {
+      e.target.classList.remove("dragging");
+    }
+  } catch (error) {
+    console.error("Error in drag end:", error);
+  }
 }
 
 function handleDragOver(e) {
-  e.preventDefault();
-  e.dataTransfer.dropEffect = "copy";
+  try {
+    e.preventDefault();
+    if (e.dataTransfer) {
+      e.dataTransfer.dropEffect = "copy";
+    }
+  } catch (error) {
+    console.error("Error in drag over:", error);
+  }
 }
 
 function handleDrop(e) {
-  e.preventDefault();
-  const value = e.dataTransfer.getData("text/plain");
-  const zone = e.target.closest(".drop-zone");
-  if (zone && value) {
-    placeAnswer(zone, value);
-    playSound("dropSound");
+  try {
+    e.preventDefault();
+    const value = e.dataTransfer?.getData("text/plain");
+    const zone = e.target?.closest(".drop-zone");
+    
+    if (zone && value) {
+      placeAnswer(zone, value);
+      playSound("dropSound");
+    }
+  } catch (error) {
+    console.error("Error in drop:", error);
   }
 }
 
 // -------- Touch drag handlers --------
-
 function handleTouchStart(e) {
-  // Only process single touch
-  if (e.touches.length !== 1) return;
+  try {
+    if (e.touches.length !== 1) return;
+    e.preventDefault();
 
-  e.preventDefault();
-  dragItem = e.target.closest(".drag-item");
-  if (!dragItem) return;
+    dragItem = e.target?.closest(".drag-item");
+    if (!dragItem) return;
 
-  // Save start position
-  const touch = e.touches[0];
-  dragStartX = touch.clientX;
-  dragStartY = touch.clientY;
+    const touch = e.touches[0];
+    dragStartX = touch.clientX;
+    dragStartY = touch.clientY;
 
-  // Setup long press timer (300ms) to start dragging
-  longPressTimeout = setTimeout(() => {
-    isTouchDragging = true;
+    // Clear any existing timeout
+    cleanupTouchTimeout();
 
-    // Create a clone of the drag item as a ghost element following the finger
-    dragClone = dragItem.cloneNode(true);
-    dragClone.style.position = "fixed";
-    dragClone.style.pointerEvents = "none";
-    dragClone.style.opacity = "0.7";
-    dragClone.style.zIndex = "1000";
-    dragClone.style.left = `${dragStartX - dragItem.offsetWidth / 2}px`;
-    dragClone.style.top = `${dragStartY - dragItem.offsetHeight / 2}px`;
-    dragClone.classList.add("dragging");
+    longPressTimeout = setTimeout(() => {
+      isTouchDragging = true;
 
-    document.body.appendChild(dragClone);
+      // สร้างองค์ประกอบลากแบบ ghost
+      dragClone = dragItem.cloneNode(true);
+      Object.assign(dragClone.style, {
+        position: "fixed",
+        pointerEvents: "none",
+        opacity: "0.7",
+        zIndex: "1000",
+        left: `${dragStartX - dragItem.offsetWidth / 2}px`,
+        top: `${dragStartY - dragItem.offsetHeight / 2}px`,
+        width: `${dragItem.offsetWidth}px`,
+        height: `${dragItem.offsetHeight}px`
+      });
+      dragClone.classList.add("dragging");
 
-    // Add dragging style to original item (optional)
-    dragItem.classList.add("dragging");
-  }, 300);
+      document.body.appendChild(dragClone);
+      dragItem.classList.add("dragging");
+    }, 300);
+  } catch (error) {
+    console.error("Error in touch start:", error);
+    cleanupTouchDrag();
+  }
 }
 
 function handleTouchMove(e) {
-  if (!dragItem) return;
+  try {
+    if (!dragItem) return;
 
-  const touch = e.touches[0];
-  const moveX = touch.clientX;
-  const moveY = touch.clientY;
+    const touch = e.touches[0];
+    const moveX = touch.clientX;
+    const moveY = touch.clientY;
 
-  const distX = Math.abs(moveX - dragStartX);
-  const distY = Math.abs(moveY - dragStartY);
-
-  // ถ้านิ้วขยับก่อน long press ก็ยกเลิกลาก
-  if (!isTouchDragging && (distX > 10 || distY > 10)) {
-    clearTimeout(longPressTimeout);
-    longPressTimeout = null;
-    dragItem = null;
-    return;
-  }
-
-  if (isTouchDragging) {
-    e.preventDefault();
-
-    // 👇 เลื่อน clone ตามนิ้ว
-    dragClone.style.left = `${moveX - dragClone.offsetWidth / 2}px`;
-    dragClone.style.top = `${moveY - dragClone.offsetHeight / 2}px`;
-
-    // 👇 เพิ่ม Auto Scroll ตอนลากใกล้ขอบจอ
-    const threshold = 50;      // ห่างจากขอบกี่ px ถึงจะเริ่ม scroll
-    const scrollSpeed = 10;    // ความเร็ว scroll ต่อ frame
-
-    if (moveY < threshold) {
-      window.scrollBy(0, -scrollSpeed); // scroll ขึ้น
-    } else if (moveY > window.innerHeight - threshold) {
-      window.scrollBy(0, scrollSpeed); // scroll ลง
+    if (!isTouchDragging) {
+      const distX = Math.abs(moveX - dragStartX);
+      const distY = Math.abs(moveY - dragStartY);
+      
+      if (distX > 10 || distY > 10) {
+        cleanupTouchDrag();
+        return;
+      }
     }
+
+    if (isTouchDragging) {
+      e.preventDefault();
+
+      // เลื่อน clone ตามนิ้ว
+      if (dragClone) {
+        dragClone.style.left = `${moveX - dragClone.offsetWidth / 2}px`;
+        dragClone.style.top = `${moveY - dragClone.offsetHeight / 2}px`;
+      }
+
+      // Auto-scroll เมื่อใกล้ขอบจอ
+      handleAutoScroll(moveY);
+    }
+  } catch (error) {
+    console.error("Error in touch move:", error);
+    cleanupTouchDrag();
   }
 }
 
+function handleAutoScroll(currentY) {
+  try {
+    // หยุดการ scroll อัตโนมัติที่อาจมีอยู่
+    if (scrollInterval) {
+      clearInterval(scrollInterval);
+      scrollInterval = null;
+    }
+
+    const threshold = 50;
+    const scrollSpeed = 10;
+
+    if (currentY < threshold) {
+      // Scroll ขึ้น
+      scrollInterval = setInterval(() => {
+        window.scrollBy(0, -scrollSpeed);
+      }, 16);
+    } else if (currentY > window.innerHeight - threshold) {
+      // Scroll ลง
+      scrollInterval = setInterval(() => {
+        window.scrollBy(0, scrollSpeed);
+      }, 16);
+    }
+  } catch (error) {
+    console.error("Error in auto scroll:", error);
+  }
+}
 
 function handleTouchEnd(e) {
-  clearTimeout(longPressTimeout);
-  longPressTimeout = null;
+  try {
+    cleanupTouchTimeout();
+    stopAutoScroll();
 
-  if (!dragItem) return;
-
-  if (isTouchDragging) {
+    if (!isTouchDragging || !dragItem) return;
     e.preventDefault();
 
-    let dropZone = null;
-    // Identify element under finger at touch end
     const touch = e.changedTouches[0];
     const elem = document.elementFromPoint(touch.clientX, touch.clientY);
-
-    if (elem) {
-      dropZone = elem.closest(".drop-zone");
-    }
+    const dropZone = elem?.closest(".drop-zone");
 
     if (dropZone) {
       placeAnswer(dropZone, dragItem.dataset.value);
       playSound("dropSound");
     }
 
-    // Cleanup clone and dragging class
-    if (dragClone && dragClone.parentNode) {
-      dragClone.parentNode.removeChild(dragClone);
-    }
-    dragClone = null;
-    dragItem.classList.remove("dragging");
+    cleanupTouchDrag();
+  } catch (error) {
+    console.error("Error in touch end:", error);
+    cleanupTouchDrag();
   }
-
-  dragItem = null;
-  isTouchDragging = false;
 }
 
-function handleTouchCancel(e) {
-  clearTimeout(longPressTimeout);
-  longPressTimeout = null;
-
-  if (dragClone && dragClone.parentNode) {
-    dragClone.parentNode.removeChild(dragClone);
+function handleTouchCancel() {
+  try {
+    cleanupTouchDrag();
+  } catch (error) {
+    console.error("Error in touch cancel:", error);
   }
-  if (dragItem) dragItem.classList.remove("dragging");
-  dragClone = null;
-  dragItem = null;
-  isTouchDragging = false;
+}
+
+function cleanupTouchTimeout() {
+  if (longPressTimeout) {
+    clearTimeout(longPressTimeout);
+    longPressTimeout = null;
+  }
+}
+
+function stopAutoScroll() {
+  if (scrollInterval) {
+    clearInterval(scrollInterval);
+    scrollInterval = null;
+  }
+}
+
+function cleanupTouchDrag() {
+  try {
+    cleanupTouchTimeout();
+    stopAutoScroll();
+    
+    if (dragClone?.parentNode) {
+      dragClone.parentNode.removeChild(dragClone);
+    }
+    
+    if (dragItem?.classList?.contains("dragging")) {
+      dragItem.classList.remove("dragging");
+    }
+    
+    dragClone = null;
+    dragItem = null;
+    isTouchDragging = false;
+  } catch (error) {
+    console.error("Error cleaning up touch drag:", error);
+  }
 }
 
 // -------- Common functions --------
-
 function placeAnswer(zone, value) {
-  if (!zone) return;
+  try {
+    if (!zone) return;
 
-  // If already has dropped value, just overwrite without returning old
-  zone.textContent = value;
-  zone.dataset.droppedValue = value;
-  zone.classList.add("success");
-
-  setTimeout(() => zone.classList.remove("success"), 300);
+    zone.textContent = value;
+    zone.dataset.droppedValue = value;
+    zone.classList.add("success");
+    
+    setTimeout(() => {
+      if (zone.classList.contains("success")) {
+        zone.classList.remove("success");
+      }
+    }, 300);
+  } catch (error) {
+    console.error("Error placing answer:", error);
+  }
 }
 
 function handleDoubleClick(e) {
-  const zone = e.target.closest(".drop-zone");
-  if (zone && zone.dataset.droppedValue) {
-    clearAnswer(zone);
-    playSound("dblclick");
+  try {
+    const zone = e.target?.closest(".drop-zone");
+    if (zone && zone.dataset.droppedValue) {
+      clearAnswer(zone);
+      playSound("dblclick");
+    }
+  } catch (error) {
+    console.error("Error in double click:", error);
   }
 }
 
 function clearAnswer(zone) {
+  try {
+    if (!zone) return;
+    
     delete zone.dataset.droppedValue;
     zone.textContent = "";
+    zone.classList.remove("correct", "incorrect", "success");
+  } catch (error) {
+    console.error("Error clearing answer:", error);
+  }
 }
 
 function checkAnswers(questionId) {
-  if (gameState.answeredQuestions[questionId]) {
-    alertSystem.show("warning", "แจ้งเตือน", "คุณได้ตรวจคำตอบข้อนี้แล้ว", () => playSound("checked"));
-    return;
-  }
-
-  let allCorrect = true;
-
-  document.querySelectorAll(`#${questionId} .drop-zone`).forEach((zone) => {
-    const correctAnswer = zone.dataset.correct;
-    const userAnswer = zone.dataset.droppedValue || "";
-    if (userAnswer === correctAnswer) {
-      zone.classList.add("correct");
-      zone.classList.remove("incorrect");
-      playSound("correct");
-    } else {
-      zone.classList.add("incorrect");
-      zone.classList.remove("correct");
-      playSound("answerIncorrect");
-      allCorrect = false;
+  try {
+    if (!questionId || gameState.answeredQuestions[questionId]) {
+      alertSystem.show("warning", "แจ้งเตือน", "คุณได้ตรวจคำตอบข้อนี้แล้ว", () => playSound("checked"));
+      return;
     }
-  });
 
-  if (allCorrect) {
-    gameState.score++;
-    gameState.answeredQuestions[questionId] = true;
-    updateScoreDisplay();
-    updateProgressDisplay();
+    let allCorrect = true;
+    const dropZones = document.querySelectorAll(`#${questionId} .drop-zone`);
+    
+    if (!dropZones.length) {
+      alertSystem.show("error", "ข้อผิดพลาด", "ไม่พบคำถามที่ระบุ");
+      return;
+    }
 
-    alertSystem.show("success", "ถูกต้อง!", "คุณสามารถไปข้อถัดไปได้", () => {
-      setTimeout(() => nextQuestion(questionId), 1000);
+    dropZones.forEach((zone) => {
+      const correctAnswer = zone.dataset.correct;
+      const userAnswer = zone.dataset.droppedValue || "";
+      
+      if (userAnswer === correctAnswer) {
+        zone.classList.add("correct");
+        zone.classList.remove("incorrect");
+        playSound("correct", 0.5);
+      } else {
+        zone.classList.add("incorrect");
+        zone.classList.remove("correct");
+        playSound("answerIncorrect", 0.3);
+        allCorrect = false;
+      }
     });
-  } else {
-    alertSystem.show("error", "คำตอบไม่ถูกต้อง", "บางคำตอบยังไม่ถูก กรุณาตรวจสอบอีกครั้ง");
+
+    if (allCorrect) {
+      gameState.score++;
+      gameState.answeredQuestions[questionId] = true;
+      updateScoreDisplay();
+      updateProgressDisplay();
+      
+      alertSystem.show("success", "ถูกต้อง!", "คุณสามารถไปข้อถัดไปได้", () => {
+        setTimeout(() => nextQuestion(questionId), 1000);
+      });
+    } else {
+      alertSystem.show("error", "คำตอบไม่ถูกต้อง", "บางคำตอบยังไม่ถูก กรุณาตรวจสอบอีกครั้ง");
+    }
+  } catch (error) {
+    console.error("Error checking answers:", error);
+    alertSystem.show("error", "ข้อผิดพลาด", "เกิดข้อผิดพลาดในการตรวจคำตอบ");
   }
 }
 
 function resetQuestion(questionId) {
-  document.querySelectorAll(`#${questionId} .drop-zone`).forEach((zone) => {
-    zone.textContent = "";
-    zone.classList.remove("correct", "incorrect");
-    delete zone.dataset.droppedValue;
-  });
+  try {
+    document.querySelectorAll(`#${questionId} .drop-zone`).forEach((zone) => {
+      clearAnswer(zone);
+    });
 
-  if (gameState.answeredQuestions[questionId]) {
-    gameState.score--;
-    gameState.answeredQuestions[questionId] = false;
-    updateScoreDisplay();
-    updateProgressDisplay();
+    if (gameState.answeredQuestions[questionId]) {
+      gameState.score--;
+      gameState.answeredQuestions[questionId] = false;
+      updateScoreDisplay();
+      updateProgressDisplay();
+    }
+  } catch (error) {
+    console.error("Error resetting question:", error);
   }
 }
 
 function showQuestion(questionId) {
-  document.querySelectorAll(".question-section").forEach((section) => {
-    section.classList.remove("active");
-  });
-
-  document.getElementById(questionId).classList.add("active");
+  try {
+    document.querySelectorAll(".question-section").forEach((section) => {
+      section?.classList?.remove("active");
+    });
+    
+    const question = document.getElementById(questionId);
+    if (question) {
+      question.classList.add("active");
+    }
+  } catch (error) {
+    console.error("Error showing question:", error);
+  }
 }
 
 function nextQuestion(currentQuestionId) {
-  if (gameState.currentQuestionIndex < gameState.questionOrder.length - 1) {
-    gameState.currentQuestionIndex++;
-    showQuestion(gameState.questionOrder[gameState.currentQuestionIndex]);
-    updateProgressDisplay();
-  } else {
-    showFinalResult();
-    playSound("finalResult");
+  try {
+    if (gameState.currentQuestionIndex < gameState.questionOrder.length - 1) {
+      gameState.currentQuestionIndex++;
+      showQuestion(gameState.questionOrder[gameState.currentQuestionIndex]);
+      updateProgressDisplay();
+    } else {
+      showFinalResult();
+      playSound("finalResult");
+    }
+  } catch (error) {
+    console.error("Error moving to next question:", error);
   }
 }
 
 function showFinalResult() {
-  document.querySelector(".game-container").style.display = "none";
-  const finalResult = document.getElementById("final-result");
-  finalResult.style.display = "block";
-  finalResult.querySelector("#final-score").textContent = `คุณได้คะแนน: ${gameState.score} จาก ${gameState.questionOrder.length}`;
-}
-
-function updateScoreDisplay() {
-  const totalQuestions = Object.keys(gameState.answeredQuestions).length;
-  document.getElementById("score-display").textContent = `คะแนน: ${gameState.score} จาก ${totalQuestions}`;
-}
-
-function updateProgressDisplay() {
-  document.getElementById("progress-display").textContent = `ข้อ ${gameState.currentQuestionIndex + 1} จาก ${gameState.questionOrder.length}`;
-}
-
-function playSound(soundId, volume = 1) {
-  const sound = document.getElementById(soundId);
-  if (sound) {
-    sound.currentTime = 0;
-    sound.volume = volume;
-    sound.play().catch(e => console.log("ไม่สามารถเล่นเสียงได้:", e));
+  try {
+    const gameContainer = document.querySelector(".game-container");
+    if (gameContainer) {
+      gameContainer.style.display = "none";
+    }
+    
+    const finalResult = document.getElementById("final-result");
+    if (finalResult) {
+      finalResult.style.display = "block";
+      const scoreElement = finalResult.querySelector("#final-score");
+      if (scoreElement) {
+        scoreElement.textContent = `คุณได้คะแนน: ${gameState.score} จาก ${gameState.questionOrder.length}`;
+      }
+    }
+  } catch (error) {
+    console.error("Error showing final result:", error);
   }
 }
 
+function updateScoreDisplay() {
+  try {
+    const display = document.getElementById("score-display");
+    if (display) {
+      const totalQuestions = Object.keys(gameState.answeredQuestions).length;
+      display.textContent = `คะแนน: ${gameState.score} จาก ${totalQuestions}`;
+    }
+  } catch (error) {
+    console.error("Error updating score display:", error);
+  }
+}
+
+function updateProgressDisplay() {
+  try {
+    const display = document.getElementById("progress-display");
+    if (display) {
+      display.textContent = `ข้อ ${gameState.currentQuestionIndex + 1} จาก ${gameState.questionOrder.length}`;
+    }
+  } catch (error) {
+    console.error("Error updating progress display:", error);
+  }
+}
+
+function playSound(soundId, volume = 1) {
+  try {
+    const sound = document.getElementById(soundId);
+    if (sound) {
+      sound.currentTime = 0;
+      sound.volume = Math.min(Math.max(volume, 0), 1); // จำกัดค่าระหว่าง 0-1
+      sound.play().catch(error => {
+        console.log("ไม่สามารถเล่นเสียงได้:", error);
+      });
+    }
+  } catch (error) {
+    console.error("Error playing sound:", error);
+  }
+}

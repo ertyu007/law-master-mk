@@ -53,14 +53,17 @@ const alertSystem = {
   },
 };
 
-// สถานะเกม
+// Updated game state for 20 questions
 const gameState = {
   score: 0,
   answeredQuestions: {
     q1: false, q2: false, q3: false, q4: false, q5: false,
-    q6: false, q7: false, q8: false, q9: false, q10: false
+    q6: false, q7: false, q8: false, q9: false, q10: false,
+    q11: false, q12: false, q13: false, q14: false, q15: false,
+    q16: false, q17: false, q18: false, q19: false, q20: false
   },
-  questionOrder: ["q1", "q2", "q3", "q4", "q5", "q6", "q7", "q8", "q9", "q10"],
+  questionOrder: ["q1", "q2", "q3", "q4", "q5", "q6", "q7", "q8", "q9", "q10",
+                 "q11", "q12", "q13", "q14", "q15", "q16", "q17", "q18", "q19", "q20"],
   currentQuestionIndex: 0,
 };
 

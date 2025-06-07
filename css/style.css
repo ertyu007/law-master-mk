@@ -45,14 +45,22 @@ dl,
 dd {
   margin: 0;
   padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
   min-height: 100vh;
   line-height: 1.6;
   overflow-x: hidden;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--color-bg);
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  color: var(--color-text-primary);
+  -webkit-text-size-adjust: 100%;
+  -moz-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 /* ============================================= */
@@ -98,15 +106,15 @@ body {
   --border-radius-full: 9999px;
 
   /* Shadows */
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
-  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.1);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.12);
+  --shadow-lg: 0 10px 20px rgba(0, 0, 0, 0.15);
+  --shadow-xl: 0 25px 40px rgba(0, 0, 0, 0.18);
 
   /* Transitions */
-  --transition-fast: all 0.15s ease;
-  --transition-normal: all 0.3s ease;
-  --transition-slow: all 0.5s ease;
+  --transition-fast: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 
   /* Font Families */
   --font-headings: "Poppins", "Prompt", sans-serif;
@@ -121,6 +129,9 @@ body {
   font-size: var(--text-base);
   color: var(--color-text-primary);
   background-color: var(--color-bg);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 h1,
@@ -133,34 +144,43 @@ h6 {
   font-weight: 700;
   line-height: 1.2;
   margin-bottom: var(--space-md);
+  color: var(--color-text-primary);
+  text-rendering: optimizeLegibility;
 }
 
 h1 {
   font-size: var(--text-4xl);
 }
+
 h2 {
   font-size: var(--text-3xl);
 }
+
 h3 {
   font-size: var(--text-2xl);
 }
+
 h4 {
   font-size: var(--text-xl);
 }
 
 p {
   margin-bottom: var(--space-md);
+  font-size: var(--text-base);
   line-height: 1.6;
+  color: var(--color-text-secondary);
 }
 
 a {
   color: var(--color-primary);
   text-decoration: none;
-  transition: var(--transition-fast);
+  transition: color 0.3s ease;
 }
 
-a:hover {
+a:hover,
+a:focus {
   color: var(--color-primary-dark);
+  outline: none;
 }
 
 /* ============================================= */
@@ -171,12 +191,15 @@ a:hover {
   max-width: 1200px;
   margin: 0 auto;
   padding: var(--space-lg);
+  scroll-padding-top: var(--space-xxl);
+  box-sizing: border-box;
 }
 
 .game-wrapper {
   max-width: 1000px;
   margin: 0 auto;
   padding: var(--space-xl) var(--space-md);
+  box-sizing: border-box;
 }
 
 .game-container {
@@ -185,11 +208,18 @@ a:hover {
   padding: var(--space-xl);
   box-shadow: var(--shadow-md);
   margin-bottom: var(--space-md);
-  transition: var(--transition-normal);
+  transition: box-shadow 0.3s ease; /* only box-shadow to minimize reflow */
+  will-change: box-shadow;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
+/* Enhance hover with smooth shadow and slight transform scale */
 .game-container:hover {
   box-shadow: var(--shadow-lg);
+  transform: translateY(-4px);
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+  will-change: box-shadow, transform;
 }
 
 /* ============================================= */
@@ -211,6 +241,7 @@ header {
   position: relative;
   overflow: hidden;
   font-family: var(--font-headings);
+  user-select: none;
 }
 
 header::before {
@@ -248,6 +279,7 @@ header h1 {
   position: relative;
   z-index: 1;
   text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  font-weight: 800;
 }
 
 header p {
@@ -257,6 +289,7 @@ header p {
   z-index: 1;
   font-weight: 500;
   font-family: var(--font-body);
+  user-select: text;
 }
 
 .backHome {
@@ -269,10 +302,12 @@ header p {
   font-weight: 700;
   border-radius: var(--border-radius-md);
   font-size: var(--text-lg);
-  transition: var(--transition-normal);
+  transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
   margin-left: var(--space-sm);
   box-shadow: 0 0 6px rgba(255, 255, 255, 0.4);
   font-family: var(--font-headings);
+  cursor: pointer;
+  user-select: none;
 }
 
 .backHome:hover,
@@ -282,6 +317,7 @@ header p {
   box-shadow: 0 8px 15px rgba(255, 255, 255, 0.6);
   outline: none;
 }
+
 /* ============================================= */
 /* ============== 5.5 how-to-play =========== */
 /* ============================================= */
@@ -293,6 +329,7 @@ header p {
   max-width: 900px;
   margin: 40px auto;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  user-select: text;
 }
 
 .how-to-play h2 {
@@ -300,6 +337,8 @@ header p {
   color: #4a4aff;
   margin-bottom: 24px;
   text-align: center;
+  font-weight: 700;
+  user-select: text;
 }
 
 .instructions {
@@ -314,7 +353,9 @@ header p {
   border-radius: 16px;
   border: 2px solid #dce3ff;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  transition: transform 0.2s ease;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+  user-select: text;
 }
 
 .instruction-card:hover {
@@ -333,6 +374,7 @@ header p {
   margin: 4px 0;
   color: #444;
 }
+
 /* ============================================= */
 /* ============== 6. GAME COMPONENTS =========== */
 /* ============================================= */
@@ -343,6 +385,7 @@ header p {
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: var(--space-xl);
   margin: var(--space-xxl) 0;
+  user-select: none;
 }
 
 .game-card {
@@ -355,7 +398,8 @@ header p {
   border: 1px solid transparent;
   position: relative;
   overflow: hidden;
-  transition: var(--transition-normal);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease;
+  will-change: transform, box-shadow;
 }
 
 .game-card::after {
@@ -368,18 +412,21 @@ header p {
     rgba(37, 99, 235, 0.1)
   );
   opacity: 0;
-  transition: var(--transition-normal);
+  transition: opacity 0.3s ease;
   pointer-events: none;
   border-radius: var(--border-radius-md);
 }
 
-.game-card:hover {
+.game-card:hover,
+.game-card:focus-visible {
   transform: translateY(-6px);
   box-shadow: var(--shadow-lg);
   border-color: var(--color-primary);
+  outline-offset: 2px;
 }
 
-.game-card:hover::after {
+.game-card:hover::after,
+.game-card:focus-visible::after {
   opacity: 1;
 }
 
@@ -387,19 +434,21 @@ header p {
   color: var(--color-primary);
   margin-bottom: var(--space-md);
   font-size: var(--text-xl);
-  transition: var(--transition-normal);
+  transition: color 0.3s ease;
 }
 
-.game-card:hover h2 {
+.game-card:hover h2,
+.game-card:focus-visible h2 {
   color: var(--color-primary-dark);
 }
 
 .game-card p {
   color: var(--color-text-secondary);
-  transition: var(--transition-normal);
+  transition: color 0.3s ease;
 }
 
-.game-card:hover p {
+.game-card:hover p,
+.game-card:focus-visible p {
   color: var(--color-text-primary);
 }
 
@@ -411,12 +460,13 @@ header p {
   margin-bottom: var(--space-lg);
   box-shadow: var(--shadow-sm);
   display: none;
-  transition: var(--transition-normal);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  will-change: opacity, transform;
 }
 
 .question-section.active {
   display: block;
-  animation: fadeIn 400ms ease forwards;
+  animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
 @keyframes fadeIn {
@@ -436,6 +486,7 @@ header p {
   align-items: center;
   margin: var(--space-lg) 0;
   flex-wrap: wrap;
+  user-select: none;
 }
 
 .question-number,
@@ -446,6 +497,7 @@ header p {
   border-radius: var(--border-radius-full);
   font-size: var(--text-sm);
   font-weight: 700;
+  user-select: none;
 }
 
 .timer {
@@ -453,13 +505,17 @@ header p {
   color: var(--color-dark);
 }
 
+/* Question text */
 .question-text {
   font-family: var(--font-headings);
   font-weight: 600;
   font-size: var(--text-2xl);
   color: var(--color-text-primary);
   margin-bottom: var(--space-lg);
+  user-select: text;
 }
+
+/* Modern textarea style */
 .modern-textarea {
   width: 100%;
   max-width: 600px;
@@ -474,6 +530,7 @@ header p {
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
   resize: vertical;
+  user-select: text;
 }
 
 .modern-textarea:focus {
@@ -492,10 +549,11 @@ header p {
   margin-bottom: var(--space-md);
   width: 100%;
   position: relative;
-  transition: var(--transition-normal);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
   cursor: pointer;
   font-size: var(--text-base);
   color: var(--color-text-primary);
+  user-select: none;
 }
 
 .drop-zone.long {
@@ -515,6 +573,7 @@ header p {
   background-color: #dcfce7;
 }
 
+/* Pop animation uses transform scale only for GPU acceleration */
 @keyframes pop {
   0% {
     transform: scale(1);
@@ -540,7 +599,8 @@ header p {
   font-size: var(--text-base);
   font-weight: 600;
   display: inline-block;
-  transition: var(--transition-fast);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.15s ease;
+  will-change: background-color, box-shadow, transform;
 }
 
 .drag-item:hover {
@@ -554,13 +614,16 @@ header p {
   cursor: grabbing;
   background-color: var(--color-primary-dark);
   box-shadow: var(--shadow-lg);
+  transform: translateY(-4px);
 }
 
+/* Container for drag items for wrapping */
 .items-container {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-sm);
   margin: var(--space-md) 0;
+  user-select: none;
 }
 
 /* ---------- Buttons ---------- */
@@ -581,7 +644,7 @@ button {
   font-size: var(--text-base);
   font-weight: 700;
   cursor: pointer;
-  transition: var(--transition-normal);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
   min-width: 140px;
   display: flex;
   align-items: center;
@@ -590,6 +653,8 @@ button {
   box-shadow: var(--shadow-sm);
   background-color: var(--color-primary);
   color: white;
+  user-select: none;
+  will-change: background-color, box-shadow, transform;
 }
 
 button i {
@@ -670,8 +735,9 @@ button i {
   margin: var(--space-xl) auto 0 auto;
   display: inline-block;
   box-shadow: var(--shadow-lg);
-  transition: var(--transition-normal);
+  transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
   cursor: pointer;
+  user-select: none;
 }
 
 .restart-btn:hover,
@@ -691,6 +757,7 @@ button i {
   background-color: var(--color-light);
   border-radius: var(--border-radius-md);
   box-shadow: var(--shadow-sm);
+  user-select: none;
 }
 
 .score-display {
@@ -724,6 +791,7 @@ button i {
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.3s ease, visibility 0.3s ease;
+  user-select: none;
 }
 
 .alert-overlay.active {
@@ -745,6 +813,7 @@ button i {
   transform: translate(-50%, -50%) scale(0.95);
   opacity: 0;
   transition: opacity 0.3s ease, transform 0.3s ease;
+  user-select: text;
 }
 
 .alert-overlay.active .alert-box {
@@ -756,6 +825,7 @@ button i {
   font-size: 48px;
   margin-bottom: var(--space-md);
   color: var(--color-primary);
+  user-select: none;
 }
 
 .alert-title {
@@ -771,6 +841,7 @@ button i {
   color: var(--color-text-secondary);
 }
 
+/* Alert button style */
 .alert-btn {
   padding: var(--space-sm) var(--space-xl);
   border: none;
@@ -779,10 +850,11 @@ button i {
   font-size: var(--text-base);
   font-weight: 700;
   cursor: pointer;
-  transition: var(--transition-normal);
+  transition: background-color 0.3s ease, transform 0.3s ease;
   min-width: 120px;
   background-color: var(--color-primary);
   color: white;
+  user-select: none;
 }
 
 .alert-btn:hover,
@@ -802,7 +874,7 @@ button i {
   box-shadow: var(--shadow-md);
   text-align: center;
   display: none;
-  animation: fadeIn 0.4s ease forwards;
+  animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
 .final-score {
@@ -818,7 +890,7 @@ button i {
   padding: var(--space-lg) var(--space-xl);
   border-radius: var(--border-radius-md);
   display: none;
-  animation: fadeIn 0.4s ease forwards;
+  animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
 .correct {
@@ -860,6 +932,7 @@ button i {
   display: none;
   font-size: var(--text-base);
   line-height: 1.6;
+  user-select: text;
 }
 
 /* ============================================= */
@@ -964,6 +1037,8 @@ button i {
   .question-section {
     padding: var(--space-md) var(--space-xs);
     width: 90%;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   .progress-display,
@@ -1124,6 +1199,9 @@ button i {
   font-size: 1.4rem;
 }
 
-.game-card.update-function {
-  color: red;
+/* Additional helper class for clickable cursor everywhere */
+.clickable {
+  cursor: pointer;
+  user-select: none;
 }
+
