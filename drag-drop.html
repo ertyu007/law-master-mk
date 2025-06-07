@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>เกม Drag & Drop กฎหมายไทย | Law Master Challenge</title>
+    <link href="https://fonts.googleapis.com/css2?family=TH+Sarabun+New&display=swap" rel="stylesheet" />
+    <link rel="icon" type="image/png" href="favicon.png" />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.css" />
+    
+    <meta property="og:title" content="Law Master Challenge - เกมกฎหมายสนุกและได้ความรู้" />
+    <meta property="og:description" content="เล่นเกมตอบคำถามและ Drag & Drop เพื่อเรียนรู้กฎหมายไทยอย่างสนุกและเข้าใจง่าย!" />
+    <meta property="og:image" content="./favicon.png" />
+    <meta property="og:url" content="https://ertyu447.github.io/Law-master-challenge-new/" />
+    <meta property="og:type" content="website" />
+
+    <script src="js/drag-drop.js" defer></script>
+    <script src="js/main.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js"></script>
+</head>
+
+<body>
+    <header>
+        <h1>เกม Drag & Drop ความรู้กฎหมายไทย
+            <a href="/law-master-mk/index.html" class="backHome">กลับไปหน้าแรก</a>
+        </h1>
+    </header>
+
+    <main class="game-wrapper">
+        <button id="music-toggle">🔊 เปิดเพลง</button>
+        <!-- ส่วนแสดงความคืบหน้าและคะแนน -->
+        <div class="game-info">
+            <div class="progress-display" id="progress-display">ข้อ 1 จาก 4</div>
+            <div class="score-display" id="score-display">คะแนน: 0 จาก 4</div>
+        </div>
+
+        <!-- เกม Drag & Drop -->
+        <div class="game-container">
+            <!-- ข้อ 1: กฎหมายรัฐธรรมนูญ / พระราชบัญญัติ / ประมวลกฎหมาย -->
+            <div class="question-section active" id="q11">
+                <h2>ข้อ 1: กฎหมายรัฐธรรมนูญ / พระราชบัญญัติ / ประมวลกฎหมาย</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ชื่อกฎหมาย</th>
+                            <th>ผู้เสนอร่าง</th>
+                            <th>ผู้พิจารณา</th>
+                            <th>ผู้ตรา</th>
+                            <th>การประกาศใช้</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>รัฐธรรมนูญ</td>
+                            <td class="drop-zone" data-correct="คณะปฏิรูปฯ / สภาร่างรัฐธรรมนูญ"></td>
+                            <td class="drop-zone" data-correct="รัฐสภา"></td>
+                            <td class="drop-zone" data-correct="พระมหากษัตริย์"></td>
+                            <td class="drop-zone" data-correct="ราชกิจจานุเบกษา"></td>
+                        </tr>
+                        <tr>
+                            <td>พระราชบัญญัติ</td>
+                            <td class="drop-zone" data-correct="ครม. / ส.ส. / ส.ว. / ศาล / ประชาชน"></td>
+                            <td class="drop-zone" data-correct="รัฐสภา"></td>
+                            <td class="drop-zone" data-correct="พระมหากษัตริย์"></td>
+                            <td class="drop-zone" data-correct="ราชกิจจานุเบกษา"></td>
+                        </tr>
+                        <tr>
+                            <td>ประมวลกฎหมาย</td>
+                            <td class="drop-zone" data-correct="คณะรัฐมนตรี"></td>
+                            <td class="drop-zone" data-correct="รัฐสภา"></td>
+                            <td class="drop-zone" data-correct="พระมหากษัตริย์"></td>
+                            <td class="drop-zone" data-correct="ราชกิจจานุเบกษา"></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="items-container" id="items-q11">
+                    <div class="drag-item" draggable="true" data-value="คณะปฏิรูปฯ / สภาร่างรัฐธรรมนูญ">คณะปฏิรูปฯ /
+                        สภาร่างรัฐธรรมนูญ</div>
+                    <div class="drag-item" draggable="true" data-value="ครม. / ส.ส. / ส.ว. / ศาล / ประชาชน">ครม. / ส.ส.
+                        / ส.ว. / ศาล / ประชาชน</div>
+                    <div class="drag-item" draggable="true" data-value="คณะรัฐมนตรี">คณะรัฐมนตรี</div>
+                    <div class="drag-item" draggable="true" data-value="รัฐสภา">รัฐสภา</div>
+                    <div class="drag-item" draggable="true" data-value="พระมหากษัตริย์">พระมหากษัตริย์</div>
+                    <div class="drag-item" draggable="true" data-value="ราชกิจจานุเบกษา">ราชกิจจานุเบกษา</div>
+                </div>
+
+                <div class="button-container">
+                    <button class="check-btn" onclick="checkAnswers('q11')">ตรวจคำตอบ</button>
+                    <button class="reset-btn" onclick="resetQuestion('q11')">เริ่มใหม่</button>
+                    <button class="next-btn" onclick="nextQuestion('q11')">ข้ามไปข้อถัดไป</button>
+                </div>
+            </div>
+
+            <!-- ข้อ 2: กฎหมายออกโดยฝ่ายบริหาร -->
+            <div class="question-section" id="q12">
+                <h2>ข้อ 2: กฎหมายออกโดยฝ่ายบริหาร</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ชื่อกฎหมาย</th>
+                            <th>ผู้เสนอร่าง</th>
+                            <th>ผู้พิจารณา</th>
+                            <th>ผู้ตรา</th>
+                            <th>การประกาศใช้</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>พระราชกำหนด</td>
+                            <td class="drop-zone" data-correct="รัฐมนตรีผู้รักษาการตามพระราชกำหนด"></td>
+                            <td class="drop-zone" data-correct="คณะรัฐมนตรี"></td>
+                            <td class="drop-zone" data-correct="พระมหากษัตริย์"></td>
+                            <td class="drop-zone" data-correct="ราชกิจจานุเบกษา"></td>
+                        </tr>
+                        <tr>
+                            <td>พระราชกฤษฎีกา</td>
+                            <td class="drop-zone" data-correct="รัฐมนตรีผู้เกี่ยวข้องตามกฎหมายแม่บท"></td>
+                            <td class="drop-zone" data-correct="คณะรัฐมนตรี"></td>
+                            <td class="drop-zone" data-correct="พระมหากษัตริย์"></td>
+                            <td class="drop-zone" data-correct="ราชกิจจานุเบกษา"></td>
+                        </tr>
+                        <tr>
+                            <td>กฎกระทรวง</td>
+                            <td class="drop-zone" data-correct="รัฐมนตรีผู้เกี่ยวข้องตามกฎหมายแม่บท"></td>
+                            <td class="drop-zone" data-correct="คณะรัฐมนตรี"></td>
+                            <td class="drop-zone" data-correct="รัฐมนตรีผู้รักษากฎหมาย"></td>
+                            <td class="drop-zone" data-correct="ราชกิจจานุเบกษา"></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="items-container" id="items-q12">
+                    <div class="drag-item" draggable="true" data-value="รัฐมนตรีผู้รักษาการตามพระราชกำหนด">
+                        รัฐมนตรีผู้รักษาการตามพระราชกำหนด</div>
+                    <div class="drag-item" draggable="true" data-value="รัฐมนตรีผู้เกี่ยวข้องตามกฎหมายแม่บท">
+                        รัฐมนตรีผู้เกี่ยวข้องตามกฎหมายแม่บท</div>
+                    <div class="drag-item" draggable="true" data-value="คณะรัฐมนตรี">คณะรัฐมนตรี</div>
+                    <div class="drag-item" draggable="true" data-value="พระมหากษัตริย์">พระมหากษัตริย์</div>
+                    <div class="drag-item" draggable="true" data-value="รัฐมนตรีผู้รักษากฎหมาย">รัฐมนตรีผู้รักษากฎหมาย
+                    </div>
+                    <div class="drag-item" draggable="true" data-value="ราชกิจจานุเบกษา">ราชกิจจานุเบกษา</div>
+                </div>
+
+                <div class="button-container">
+                    <button class="check-btn" onclick="checkAnswers('q12')">ตรวจคำตอบ</button>
+                    <button class="reset-btn" onclick="resetQuestion('q12')">เริ่มใหม่</button>
+                    <button class="next-btn" onclick="nextQuestion('q12')">ข้ามไปข้อถัดไป</button>
+                </div>
+            </div>
+
+            <!-- ข้อ 3: กฎหมายองค์กรปกครองส่วนท้องถิ่น -->
+            <div class="question-section" id="q13">
+                <h2>ข้อ 3: กฎหมายองค์กรปกครองส่วนท้องถิ่น</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ประเภทกฎหมาย</th>
+                            <th>ผู้เสนอร่าง</th>
+                            <th>ผู้พิจารณา</th>
+                            <th>ผู้ตรา</th>
+                            <th>ผู้ให้ความเห็นชอบ</th>
+                            <th>การประกาศใช้</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>ข้อบัญญัติกรุงเทพมหานคร</td>
+                            <td class="drop-zone" data-correct="ผู้ว่าฯ กรุงเทพฯ / สมาชิกสภากรุงเทพฯ / ประชาชน"></td>
+                            <td class="drop-zone" data-correct="สภากรุงเทพฯ"></td>
+                            <td class="drop-zone" data-correct="ผู้ว่าฯ กรุงเทพฯ"></td>
+                            <td class="drop-zone" data-correct="ผู้ว่าฯ กรุงเทพฯ"></td>
+                            <td class="drop-zone" data-correct="ราชกิจจานุเบกษา"></td>
+                        </tr>
+                        <tr>
+                            <td>เทศบัญญัติ</td>
+                            <td class="drop-zone" data-correct="นายกเทศมนตรี / สมาชิกสภาเทศบาล / ประชาชน"></td>
+                            <td class="drop-zone" data-correct="สภาเทศบาล"></td>
+                            <td class="drop-zone" data-correct="นายกเทศมนตรี"></td>
+                            <td class="drop-zone" data-correct="ผู้ว่าราชการจังหวัด"></td>
+                            <td class="drop-zone" data-correct="ประกาศที่สำนักงานเทศบาล (7 วัน)"></td>
+                        </tr>
+                        <tr>
+                            <td>ข้อบัญญัติองค์การบริหารส่วนตำบล</td>
+                            <td class="drop-zone" data-correct="นายก อบต. / สมาชิกสภา อบต. / ประชาชน"></td>
+                            <td class="drop-zone" data-correct="สภา อบต."></td>
+                            <td class="drop-zone" data-correct="นายก อบต."></td>
+                            <td class="drop-zone" data-correct="นายอำเภอ"></td>
+                            <td class="drop-zone" data-correct="เมื่อนายก อบต.ลงชื่อและประกาศ"></td>
+                        </tr>
+                        <tr>
+                            <td>ข้อบัญญัติองค์การบริหารส่วนจังหวัด</td>
+                            <td class="drop-zone" data-correct="นายก อบจ. / สมาชิกสภา อบจ. / ประชาชน"></td>
+                            <td class="drop-zone" data-correct="สภา อบจ."></td>
+                            <td class="drop-zone" data-correct="นายก อบจ."></td>
+                            <td class="drop-zone" data-correct="ผู้ว่าราชการจังหวัด"></td>
+                            <td class="drop-zone" data-correct="ประกาศที่ที่ทำการ อบจ."></td>
+                        </tr>
+                        <tr>
+                            <td>ข้อบัญญัติเมืองพัทยา</td>
+                            <td class="drop-zone" data-correct="นายกเมืองพัทยา / สมาชิกสภาเมืองพัทยา / ประชาชน"></td>
+                            <td class="drop-zone" data-correct="สภาเมืองพัทยา"></td>
+                            <td class="drop-zone" data-correct="นายกเมืองพัทยา"></td>
+                            <td class="drop-zone" data-correct="ผู้ว่าราชการจังหวัด"></td>
+                            <td class="drop-zone" data-correct="ประกาศที่ศาลาว่าการเมืองพัทยา (จ.ชลบุรี)"></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="items-container" id="items-q13">
+                    <div class="drag-item" draggable="true" data-value="ผู้ว่าฯ กรุงเทพฯ / สมาชิกสภากรุงเทพฯ / ประชาชน">
+                        ผู้ว่าฯ กรุงเทพฯ / สมาชิกสภากรุงเทพฯ / ประชาชน</div>
+                    <div class="drag-item" draggable="true" data-value="นายกเทศมนตรี / สมาชิกสภาเทศบาล / ประชาชน">
+                        นายกเทศมนตรี / สมาชิกสภาเทศบาล / ประชาชน</div>
+                    <div class="drag-item" draggable="true" data-value="นายก อบต. / สมาชิกสภา อบต. / ประชาชน">นายก อบต.
+                        / สมาชิกสภา อบต. / ประชาชน</div>
+                    <div class="drag-item" draggable="true" data-value="นายก อบจ. / สมาชิกสภา อบจ. / ประชาชน">นายก อบจ.
+                        / สมาชิกสภา อบจ. / ประชาชน</div>
+                    <div class="drag-item" draggable="true" data-value="นายกเมืองพัทยา / สมาชิกสภาเมืองพัทยา / ประชาชน">
+                        นายกเมืองพัทยา / สมาชิกสภาเมืองพัทยา / ประชาชน</div>
+                    <div class="drag-item" draggable="true" data-value="สภากรุงเทพฯ">สภากรุงเทพฯ</div>
+                    <div class="drag-item" draggable="true" data-value="สภาเทศบาล">สภาเทศบาล</div>
+                    <div class="drag-item" draggable="true" data-value="สภา อบต.">สภา อบต.</div>
+                    <div class="drag-item" draggable="true" data-value="สภา อบจ.">สภา อบจ.</div>
+                    <div class="drag-item" draggable="true" data-value="สภาเมืองพัทยา">สภาเมืองพัทยา</div>
+                    <div class="drag-item" draggable="true" data-value="ผู้ว่าฯ กรุงเทพฯ">ผู้ว่าฯ กรุงเทพฯ</div>
+                    <div class="drag-item" draggable="true" data-value="นายกเทศมนตรี">นายกเทศมนตรี</div>
+                    <div class="drag-item" draggable="true" data-value="นายก อบต.">นายก อบต.</div>
+                    <div class="drag-item" draggable="true" data-value="นายก อบจ.">นายก อบจ.</div>
+                    <div class="drag-item" draggable="true" data-value="นายกเมืองพัทยา">นายกเมืองพัทยา</div>
+                    <div class="drag-item" draggable="true" data-value="ผู้ว่าราชการจังหวัด">ผู้ว่าราชการจังหวัด</div>
+                    <div class="drag-item" draggable="true" data-value="นายอำเภอ">นายอำเภอ</div>
+                    <div class="drag-item" draggable="true" data-value="ราชกิจจานุเบกษา">ราชกิจจานุเบกษา</div>
+                    <div class="drag-item" draggable="true" data-value="ประกาศที่สำนักงานเทศบาล (7 วัน)">
+                        ประกาศที่สำนักงานเทศบาล (7 วัน)</div>
+                    <div class="drag-item" draggable="true" data-value="เมื่อนายก อบต.ลงชื่อและประกาศ">เมื่อนายก
+                        อบต.ลงชื่อและประกาศ</div>
+                    <div class="drag-item" draggable="true" data-value="ประกาศที่ที่ทำการ อบจ.">ประกาศที่ที่ทำการ อบจ.
+                    </div>
+                    <div class="drag-item" draggable="true" data-value="ประกาศที่ศาลาว่าการเมืองพัทยา (จ.ชลบุรี)">
+                        ประกาศที่ศาลาว่าการเมืองพัทยา (จ.ชลบุรี)</div>
+                </div>
+
+                <div class="button-container">
+                    <button class="check-btn" onclick="checkAnswers('q13')">ตรวจคำตอบ</button>
+                    <button class="reset-btn" onclick="resetQuestion('q13')">เริ่มใหม่</button>
+                    <button class="next-btn" onclick="nextQuestion('q13')">ข้ามไปข้อถัดไป</button>
+                </div>
+            </div>
+
+            <!-- ข้อ 4: ลำดับชั้นของกฎหมาย -->
+            <div class="question-section" id="q14">
+                <h2>ข้อ 4: ลำดับชั้นของกฎหมาย (จากสูงสุดลงล่าง)</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ลำดับ</th>
+                            <th>ชื่อกฎหมาย</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td class="drop-zone" data-correct="รัฐธรรมนูญ"></td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td class="drop-zone" data-correct="พระราชบัญญัติ / พระราชกำหนด / ประมวลกฎหมาย"></td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td class="drop-zone" data-correct="พระราชกฤษฎีกา"></td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td class="drop-zone" data-correct="กฎกระทรวง"></td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td class="drop-zone" data-correct="ระเบียบต่าง ๆ"></td>
+                        </tr>
+                        <tr>
+                            <td>6</td>
+                            <td class="drop-zone" data-correct="ประกาศ"></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="items-container" id="items-q14">
+                    <div class="drag-item" draggable="true" data-value="รัฐธรรมนูญ">รัฐธรรมนูญ</div>
+                    <div class="drag-item" draggable="true" data-value="พระราชบัญญัติ / พระราชกำหนด / ประมวลกฎหมาย">
+                        พระราชบัญญัติ / พระราชกำหนด / ประมวลกฎหมาย</div>
+                    <div class="drag-item" draggable="true" data-value="พระราชกฤษฎีกา">พระราชกฤษฎีกา</div>
+                    <div class="drag-item" draggable="true" data-value="กฎกระทรวง">กฎกระทรวง</div>
+                    <div class="drag-item" draggable="true" data-value="ระเบียบต่าง ๆ">ระเบียบต่าง ๆ</div>
+                    <div class="drag-item" draggable="true" data-value="ประกาศ">ประกาศ</div>
+                </div>
+
+                <div class="button-container">
+                    <button class="check-btn" onclick="checkAnswers('q14')">ตรวจคำตอบ</button>
+                    <button class="reset-btn" onclick="resetQuestion('q14')">เริ่มใหม่</button>
+                    <button class="next-btn" onclick="nextQuestion('q14')">ดูผลลัพธ์</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ส่วนแสดงผลลัพธ์สุดท้าย -->
+        <div id="final-result" class="result-container" style="display:none;">
+            <h2>ผลลัพธ์สุดท้าย</h2>
+            <p id="final-score">คุณได้คะแนน: 0 จาก 4</p>
+            <button class="restart-btn" onclick="location.reload()">เล่นอีกครั้ง</button>
+        </div>
+    </main>
+
+    <!-- ไฟล์เสียง -->
+    <audio id="dropSound" src="./assets/sound/vine-boom-sound-effect_KT89XIq.mp3"></audio>
+    <audio id="checked" src="./assets/sound/tuco-get-out.mp3"></audio>
+    <audio id="correct" src="./assets/sound/ta-da_yrvBrlS.mp3"></audio>
+    <audio id="finalResult" src="./assets/sound/mlg-airhorn.mp3"></audio>
+    <audio id="answerIncorrect"
+        src="./assets/sound/sabe-porque-as-meninas-dao-maior-valor-na-risada-de-ladrao-mp3cut.mp3"></audio>
+    <audio id="dblclick" src="./assets/sound/tf2-bonk.mp3"></audio>
+    <audio id="bg-music" autoplay loop>
+        <source src="./assets/playground/game-music-player-console-8bit-background-intro-theme-297305.mp3"
+            type="audio/mpeg" />
+        เบราว์เซอร์ของคุณไม่รองรับการเล่นเสียง
+    </audio>
+    <script>
+        const musicBtn = document.getElementById("music-toggle");
+        const bgMusic = document.getElementById("bg-music");
+        let isPlaying = false;
+
+        musicBtn.addEventListener("click", () => {
+            if (isPlaying) {
+                bgMusic.pause();
+                musicBtn.textContent = "🔇 เปิดเพลง";
+            } else {
+                bgMusic.play();
+                musicBtn.textContent = "🔊 ปิดเพลง";
+            }
+            isPlaying = !isPlaying;
+        });
+    </script>
+</body>
+
+</html>

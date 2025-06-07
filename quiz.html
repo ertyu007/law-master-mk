@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>เกมตอบคำถามกฎหมายไทย | Law Master Challenge</title>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;600&display=swap" rel="stylesheet" />
+    <link rel="icon" type="image/png" href="favicon.png" />
+
+    <meta property="og:title" content="Law Master Challenge - เกมกฎหมายสนุกและได้ความรู้" />
+    <meta property="og:description"
+        content="เล่นเกมตอบคำถามและ Drag & Drop เพื่อเรียนรู้กฎหมายไทยอย่างสนุกและเข้าใจง่าย!" />
+    <meta property="og:image" content="./favicon.png" />
+    <meta property="og:url" content="https://ertyu447.github.io/Law-master-challenge-new/" />
+    <meta property="og:type" content="website" />
+
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.css" />
+
+    <script src="js/quiz.js" defer></script>
+    <script src="js/main.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>Law Quest</h1>
+            <p>เกมตอบคำถามกฎหมายไทย พิสูจน์ความรู้ของคุณ!</p>
+            <a href="/law-master-mk/index.html" class="backHome">กลับไปหน้าแรก</a>
+        </header>
+
+        <div id="gameArea">
+            <button id="music-toggle">🔊 เปิดเพลง</button>
+            <div class="game-container">
+                <div class="question-header">
+                    <span class="question-number">ข้อที่ <span id="currentQ">1</span>/10</span>
+                    <span class="timer">เวลาเหลือ: <span id="time">120</span> วินาที</span>
+                </div>
+
+                <div class="question-text" id="question"></div>
+
+                <textarea id="userAnswer" class="modern-textarea" placeholder="พิมพ์คำตอบของคุณ..."></textarea>
+
+                <div class="buttons">
+                    <button class="submit-btn" id="submitBtn" onclick="checkAnswer()">ส่งคำตอบ</button>
+                    <button class="hint-btn" id="hintBtn" onclick="showHint()">ขอคำใบ้</button>
+                    <button class="next-btn" id="nextBtn" onclick="nextQuestion()"
+                        style="display:none;">ข้อต่อไป</button>
+                    <div id="hintBox"></div>
+                </div>
+
+                <div class="score-display">
+                    คะแนน: <span id="score">0</span>/20
+                </div>
+
+                <div class="result-box" id="resultBox" style="display:none;">
+                    <div class="result-status" id="resultStatus"></div>
+                    <div class="correct-answer">
+                        <strong>เฉลย:</strong> <span id="correctAnswer"></span>
+                    </div>
+                    <div class="explanation" id="explanation"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Audio elements -->
+    <audio id="tada" src="./assets/sound/ta-da_yrvBrlS.mp3"></audio>
+    <audio id="among" src="./assets/sound/among-us-role-reveal-sound.mp3"></audio>
+    <audio id="Gameover" src="./assets/sound/mlg-airhorn.mp3"></audio>
+    <audio id="kaa" src="./assets/sound/error_CDOxCYm.mp3"></audio>
+    <audio id="dropSound" src="./assets/sound/ta-da_yrvBrlS.mp3"></audio>
+
+    <audio id="bg-music" autoplay loop>
+        <source id="bg-music"
+            src="./assets/playground/gaming-music-8-bit-console-play-background-intro-theme-342069.mp3"
+            type="audio/mpeg" />
+        เบราว์เซอร์ของคุณไม่รองรับการเล่นเสียง
+    </audio>
+    <script>
+        const musicBtn = document.getElementById("music-toggle");
+        const bgMusic = document.getElementById("bg-music");
+        let isPlaying = false;
+
+        musicBtn.addEventListener("click", () => {
+            if (isPlaying) {
+                bgMusic.pause();
+                musicBtn.textContent = "🔇 เปิดเพลง";
+            } else {
+                bgMusic.play();
+                musicBtn.textContent = "🔊 ปิดเพลง";
+            }
+            isPlaying = !isPlaying;
+        });
+    </script>
+</body>
+
+</html>
