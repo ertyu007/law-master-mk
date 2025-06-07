@@ -283,6 +283,7 @@ header h1 {
 }
 
 header p {
+  color: white;
   font-size: var(--text-xl);
   opacity: 0.85;
   position: relative;
@@ -1162,7 +1163,7 @@ button i {
   }
 
   .game-card {
-    width: calc(50% - var(--space-lg));
+    width: calc(100% - var(--space-lg));
   }
 
   .question-text {

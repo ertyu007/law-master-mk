@@ -17,7 +17,7 @@
     <meta property="og:url" content="https://ertyu447.github.io/law-master-mk/" />
     <meta property="og:type" content="website" />
 
-    <script src="js/law-types-touch.js"></script>
+    <script src="js/law-chapter1.js"></script>
     <script src="js/main.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js"></script>
 </head>
@@ -26,7 +26,6 @@
     <header>
         <h1>เกม Drag & Drop ประเภทของกฎหมาย
             <a href="/law-master-mk/index.html" class="backHome">กลับไปหน้าแรก</a>
-            <!-- /law-master-challenge/index.html -->
         </h1>
     </header>
 
@@ -34,8 +33,8 @@
         <button id="music-toggle">🔊 เปิดเพลง</button>
         <!-- Progress and score display -->
         <div class="game-info">
-            <div class="progress-display" id="progress-display">ข้อ 1 จาก 10</div>
-            <div class="score-display" id="score-display">คะแนน: 0 จาก 10</div>
+            <div class="progress-display" id="progress-display">ข้อ 1 จาก 20</div>
+            <div class="score-display" id="score-display">คะแนน: 0 จาก 20</div>
         </div>
 
         <div class="game-container">
@@ -289,9 +288,210 @@
                 <div class="button-container">
                     <button class="check-btn" onclick="checkAnswers('q10')">ตรวจคำตอบ</button>
                     <button class="reset-btn" onclick="resetQuestion('q10')">เริ่มใหม่</button>
-                    <button class="next-btn" onclick="nextQuestion('q10')">ดูผลลัพธ์</button>
+                    <button class="next-btn" onclick="nextQuestion('q10')">ข้ามไปข้อถัดไป</button>
                 </div>
             </div>
+
+            <!-- Question 11 -->
+            <div class="question-section" id="q11">
+                <h2>ข้อ 11: กฎหมายลายลักษณ์อักษรที่บัญญัติขึ้นโดยฝ่ายนิติบัญญัติ</h2>
+                <div class="drop-zone" data-correct="รัฐธรรมนูญ"></div>
+                <div class="drop-zone" data-correct="พระราชบัญญัติ"></div>
+
+                <div class="items-container" id="items-q11">
+                    <div class="drag-item" draggable="true" data-value="รัฐธรรมนูญ">รัฐธรรมนูญ</div>
+                    <div class="drag-item" draggable="true" data-value="พระราชบัญญัติ">พระราชบัญญัติ</div>
+                    <div class="drag-item" draggable="true" data-value="พระราชกำหนด">พระราชกำหนด</div>
+                </div>
+
+                <div class="button-container">
+                    <button class="check-btn" onclick="checkAnswers('q11')">ตรวจคำตอบ</button>
+                    <button class="reset-btn" onclick="resetQuestion('q11')">เริ่มใหม่</button>
+                    <button class="next-btn" onclick="nextQuestion('q11')">ข้ามไปข้อถัดไป</button>
+                </div>
+            </div>
+
+            <!-- Question 12 -->
+            <div class="question-section" id="q12">
+                <h2>ข้อ 12: กฎหมายลายลักษณ์อักษรที่บัญญัติขึ้นโดยฝ่ายบริหาร</h2>
+                <div class="drop-zone" data-correct="พระราชกำหนด"></div>
+                <div class="drop-zone" data-correct="พระราชกฤษฎีกา"></div>
+                <div class="drop-zone" data-correct="กฎกระทรวง"></div>
+
+                <div class="items-container" id="items-q12">
+                    <div class="drag-item" draggable="true" data-value="พระราชกำหนด">พระราชกำหนด</div>
+                    <div class="drag-item" draggable="true" data-value="พระราชกฤษฎีกา">พระราชกฤษฎีกา</div>
+                    <div class="drag-item" draggable="true" data-value="กฎกระทรวง">กฎกระทรวง</div>
+                    <div class="drag-item" draggable="true" data-value="รัฐธรรมนูญ">รัฐธรรมนูญ</div>
+                </div>
+
+                <div class="button-container">
+                    <button class="check-btn" onclick="checkAnswers('q12')">ตรวจคำตอบ</button>
+                    <button class="reset-btn" onclick="resetQuestion('q12')">เริ่มใหม่</button>
+                    <button class="next-btn" onclick="nextQuestion('q12')">ข้ามไปข้อถัดไป</button>
+                </div>
+            </div>
+
+            <!-- Question 13 -->
+            <div class="question-section" id="q13">
+                <h2>ข้อ 13: กฎหมายลายลักษณ์อักษรที่บัญญัติขึ้นโดยองค์กรปกครองส่วนท้องถิ่น</h2>
+                <div class="drop-zone" data-correct="เทศบัญญัติ"></div>
+                <div class="drop-zone" data-correct="ข้อบัญญัติองค์การบริหารส่วนจังหวัด"></div>
+                <div class="drop-zone" data-correct="ข้อบัญญัติองค์การบริหารส่วนตำบล"></div>
+                <div class="drop-zone" data-correct="ข้อบัญญัติกรุงเทพมหานคร"></div>
+                <div class="drop-zone" data-correct="ข้อบัญญัติเมืองพัทยา"></div>
+
+                <div class="items-container" id="items-q13">
+                    <div class="drag-item" draggable="true" data-value="เทศบัญญัติ">เทศบัญญัติ</div>
+                    <div class="drag-item" draggable="true" data-value="ข้อบัญญัติองค์การบริหารส่วนจังหวัด">
+                        ข้อบัญญัติองค์การบริหารส่วนจังหวัด</div>
+                    <div class="drag-item" draggable="true" data-value="ข้อบัญญัติองค์การบริหารส่วนตำบล">
+                        ข้อบัญญัติองค์การบริหารส่วนตำบล</div>
+                    <div class="drag-item" draggable="true" data-value="ข้อบัญญัติกรุงเทพมหานคร">ข้อบัญญัติกรุงเทพมหานคร
+                    </div>
+                    <div class="drag-item" draggable="true" data-value="ข้อบัญญัติเมืองพัทยา">ข้อบัญญัติเมืองพัทยา</div>
+                </div>
+
+                <div class="button-container">
+                    <button class="check-btn" onclick="checkAnswers('q13')">ตรวจคำตอบ</button>
+                    <button class="reset-btn" onclick="resetQuestion('q13')">เริ่มใหม่</button>
+                    <button class="next-btn" onclick="nextQuestion('q13')">ข้ามไปข้อถัดไป</button>
+                </div>
+            </div>
+
+            <!-- Question 14 -->
+            <div class="question-section" id="q14">
+                <h2>ข้อ 14: กฎหมายที่ไม่เป็นลายลักษณ์อักษร</h2>
+                <div class="drop-zone" data-correct="กฎหมายจารีตประเพณี"></div>
+                <div class="drop-zone" data-correct="หลักกฎหมายทั่วไป"></div>
+
+                <div class="items-container" id="items-q14">
+                    <div class="drag-item" draggable="true" data-value="กฎหมายจารีตประเพณี">กฎหมายจารีตประเพณี</div>
+                    <div class="drag-item" draggable="true" data-value="หลักกฎหมายทั่วไป">หลักกฎหมายทั่วไป</div>
+                    <div class="drag-item" draggable="true" data-value="พระราชบัญญัติ">พระราชบัญญัติ</div>
+                </div>
+
+                <div class="button-container">
+                    <button class="check-btn" onclick="checkAnswers('q14')">ตรวจคำตอบ</button>
+                    <button class="reset-btn" onclick="resetQuestion('q14')">เริ่มใหม่</button>
+                    <button class="next-btn" onclick="nextQuestion('q14')">ข้ามไปข้อถัดไป</button>
+                </div>
+            </div>
+
+            <!-- Question 15 -->
+            <div class="question-section" id="q15">
+                <h2>ข้อ 15: ระบบกฎหมายลายลักษณ์อักษร (Civil Law)</h2>
+                <div class="drop-zone" data-correct="กฎหมายสิบสองโต๊ะ"></div>
+
+                <div class="items-container" id="items-q15">
+                    <div class="drag-item" draggable="true" data-value="กฎหมายสิบสองโต๊ะ">กฎหมายสิบสองโต๊ะ</div>
+                    <div class="drag-item" draggable="true" data-value="กฎหมายพระธรรมศาสตร์">กฎหมายพระธรรมศาสตร์</div>
+                    <div class="drag-item" draggable="true" data-value="กฎหมายจารีตประเพณี">กฎหมายจารีตประเพณี</div>
+                </div>
+
+                <div class="button-container">
+                    <button class="check-btn" onclick="checkAnswers('q15')">ตรวจคำตอบ</button>
+                    <button class="reset-btn" onclick="resetQuestion('q15')">เริ่มใหม่</button>
+                    <button class="next-btn" onclick="nextQuestion('q15')">ข้ามไปข้อถัดไป</button>
+                </div>
+            </div>
+
+            <!-- Question 16 -->
+            <div class="question-section" id="q16">
+                <h2>ข้อ 16: ระบบกฎหมายที่ไม่เป็นลายลักษณ์อักษร (Common Law)</h2>
+                <div class="drop-zone" data-correct="จารีตประเพณี"></div>
+                <div class="drop-zone" data-correct="คำพิพากษาของศาล"></div>
+
+                <div class="items-container" id="items-q16">
+                    <div class="drag-item" draggable="true" data-value="จารีตประเพณี">จารีตประเพณี</div>
+                    <div class="drag-item" draggable="true" data-value="คำพิพากษาของศาล">คำพิพากษาของศาล</div>
+                    <div class="drag-item" draggable="true" data-value="พระราชบัญญัติ">พระราชบัญญัติ</div>
+                </div>
+
+                <div class="button-container">
+                    <button class="check-btn" onclick="checkAnswers('q16')">ตรวจคำตอบ</button>
+                    <button class="reset-btn" onclick="resetQuestion('q16')">เริ่มใหม่</button>
+                    <button class="next-btn" onclick="nextQuestion('q16')">ข้ามไปข้อถัดไป</button>
+                </div>
+            </div>
+
+            <!-- Question 17 -->
+            <div class="question-section" id="q17">
+                <h2>ข้อ 17: ภาคกฎหมายไทยดั้งเดิมเป็นช่วงระยะเวลาตั้งแต่</h2>
+                <div class="drop-zone" data-correct="ก่อนสมัยสุโขทัย"></div>
+                <div class="drop-zone" data-correct="สมัยกรุงศรีอยุธยา"></div>
+                <div class="drop-zone" data-correct="สิ้นรัชกาลที่ 3"></div>
+
+                <div class="items-container" id="items-q17">
+                    <div class="drag-item" draggable="true" data-value="ก่อนสมัยสุโขทัย">ก่อนสมัยสุโขทัย</div>
+                    <div class="drag-item" draggable="true" data-value="สมัยกรุงศรีอยุธยา">สมัยกรุงศรีอยุธยา</div>
+                    <div class="drag-item" draggable="true" data-value="สิ้นรัชกาลที่ 3">สิ้นรัชกาลที่ 3</div>
+                    <div class="drag-item" draggable="true" data-value="รัชกาลที่ 5">รัชกาลที่ 5</div>
+                </div>
+
+                <div class="button-container">
+                    <button class="check-btn" onclick="checkAnswers('q17')">ตรวจคำตอบ</button>
+                    <button class="reset-btn" onclick="resetQuestion('q17')">เริ่มใหม่</button>
+                    <button class="next-btn" onclick="nextQuestion('q17')">ข้ามไปข้อถัดไป</button>
+                </div>
+            </div>
+
+            <!-- Question 18 -->
+            <div class="question-section" id="q18">
+                <h2>ข้อ 18: กฎหมายที่สำคัญของอินเดียที่มีอิทธิพลต่อกฎหมายไทย</h2>
+                <div class="drop-zone" data-correct="กฎหมายพระมนู"></div>
+                <div class="drop-zone" data-correct="พระธรรมศาสตร์"></div>
+
+                <div class="items-container" id="items-q18">
+                    <div class="drag-item" draggable="true" data-value="กฎหมายพระมนู">กฎหมายพระมนู</div>
+                    <div class="drag-item" draggable="true" data-value="พระธรรมศาสตร์">พระธรรมศาสตร์</div>
+                    <div class="drag-item" draggable="true" data-value="กฎหมายสิบสองโต๊ะ">กฎหมายสิบสองโต๊ะ</div>
+                </div>
+
+                <div class="button-container">
+                    <button class="check-btn" onclick="checkAnswers('q18')">ตรวจคำตอบ</button>
+                    <button class="reset-btn" onclick="resetQuestion('q18')">เริ่มใหม่</button>
+                    <button class="next-btn" onclick="nextQuestion('q18')">ข้ามไปข้อถัดไป</button>
+                </div>
+            </div>
+
+            <!-- Question 19 -->
+            <div class="question-section" id="q19">
+                <h2>ข้อ 19: กฎหมายตราสามดวง รัชกาลที่ 1 ทรงโปรดเกล้าฯ ให้ชำระใหม่จากกฎหมายใด</h2>
+                <div class="drop-zone" data-correct="กฎหมายพระธรรมศาสตร์"></div>
+
+                <div class="items-container" id="items-q19">
+                    <div class="drag-item" draggable="true" data-value="กฎหมายพระธรรมศาสตร์">กฎหมายพระธรรมศาสตร์</div>
+                    <div class="drag-item" draggable="true" data-value="กฎหมายพระมนู">กฎหมายพระมนู</div>
+                    <div class="drag-item" draggable="true" data-value="กฎหมายสิบสองโต๊ะ">กฎหมายสิบสองโต๊ะ</div>
+                </div>
+
+                <div class="button-container">
+                    <button class="check-btn" onclick="checkAnswers('q19')">ตรวจคำตอบ</button>
+                    <button class="reset-btn" onclick="resetQuestion('q19')">เริ่มใหม่</button>
+                    <button class="next-btn" onclick="nextQuestion('q19')">ข้ามไปข้อถัดไป</button>
+                </div>
+            </div>
+
+            <!-- Question 20 -->
+            <div class="question-section" id="q20">
+                <h2>ข้อ 20: ภาคกฎหมายสมัยใหม่ เริ่มตั้งแต่สมัยรัชกาลที่เท่าไร</h2>
+                <div class="drop-zone" data-correct="รัชกาลที่ 4"></div>
+                <div class="drop-zone" data-correct="รัชกาลที่ 5"></div>
+
+                <div class="items-container" id="items-q20">
+                    <div class="drag-item" draggable="true" data-value="รัชกาลที่ 4">รัชกาลที่ 4</div>
+                    <div class="drag-item" draggable="true" data-value="รัชกาลที่ 5">รัชกาลที่ 5</div>
+                    <div class="drag-item" draggable="true" data-value="รัชกาลที่ 3">รัชกาลที่ 3</div>
+                </div>
+
+                <div class="button-container">
+                    <button class="check-btn" onclick="checkAnswers('q20')">ตรวจคำตอบ</button>
+                    <button class="reset-btn" onclick="resetQuestion('q20')">เริ่มใหม่</button>
+                    <button class="next-btn" onclick="nextQuestion('q20')">ดูผลลัพธ์</button>
+                </div>
+            </div>
+
 
         </div>
 
@@ -311,8 +511,8 @@
         src="./assets/sound/sabe-porque-as-meninas-dao-maior-valor-na-risada-de-ladrao-mp3cut.mp3"></audio>
     <audio id="dblclick" src="./assets/sound/tf2-bonk.mp3"></audio>
     <audio id="bg-music" autoplay loop>
-        <!-- <source src="./assets/playground/game-music-player-console-8bit-background-intro-theme-297305.mp3"
-            type="audio/mpeg" /> -->
+        <source src="./assets/playground/game-music-player-console-8bit-background-intro-theme-297305.mp3"
+            type="audio/mpeg" />
         เบราว์เซอร์ของคุณไม่รองรับการเล่นเสียง
     </audio>
     <script>
