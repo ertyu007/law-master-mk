@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>การ์ดทบทวนกฎหมาย</title>
+  <style>
+    :root {
+      --primary-color: #2563eb;
+      --secondary-color: #1e40af;
+      --text-color: #1f2937;
+      --light-color: #f9fafb;
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'Kanit', 'Sarabun', sans-serif;
+      background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
+      min-height: 100vh;
+      padding: 20px;
+      color: var(--text-color);
+    }
+    
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+      color: var(--primary-color);
+      font-size: 2rem;
+    }
+    
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 25px;
+      justify-items: center;
+    }
+    
+    .card {
+      width: 100%;
+      height: 200px;
+      perspective: 1000px;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+    
+    .card:hover {
+      transform: translateY(-5px);
+    }
+    
+    .card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.6s;
+      transform-style: preserve-3d;
+    }
+    
+    .card.flipped .card-inner {
+      transform: rotateY(180deg);
+    }
+    
+    .card-front, .card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 25px;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+    
+    .card-front {
+      background-color: white;
+      border: 1px solid #e5e7eb;
+      font-weight: 500;
+      font-size: 1.1rem;
+    }
+    
+    .card-back {
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      color: white;
+      transform: rotateY(180deg);
+      font-size: 1rem;
+      line-height: 1.5;
+    }
+    
+    .card-number {
+      position: absolute;
+      top: 10px;
+      left: 15px;
+      font-size: 0.9rem;
+      color: #6b7280;
+    }
+    
+    .card-back .card-number {
+      color: rgba(255, 255, 255, 0.7);
+    }
+    
+    @media (max-width: 768px) {
+      .cards-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 15px;
+      }
+      
+      .card {
+        height: 180px;
+      }
+      
+      .card-front, .card-back {
+        padding: 20px;
+        font-size: 1rem;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .container {
+        padding: 10px;
+      }
+      
+      h1 {
+        font-size: 1.5rem;
+        margin-bottom: 20px;
+      }
+      
+      .cards-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .card {
+        height: 160px;
+        max-width: 350px;
+      }
+    }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500&family=Sarabun:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <h1>การ์ดทบทวนกฎหมาย</h1>
+    
+    <div class="cards-grid">
+      <!-- การ์ดตัวอย่าง -->
+      <div class="card" onclick="this.classList.toggle('flipped')">
+        <div class="card-inner">
+          <div class="card-front">
+            <span class="card-number">1.</span>
+            กฎหมายสารบัญญัติ คืออะไร?
+          </div>
+          <div class="card-back">
+            <span class="card-number">1.</span>
+            กฎหมายที่สั่งห้ามหรือให้ทำ เช่น ฆ่าคนผิดกฎหมาย
+          </div>
+        </div>
+      </div>
+
+      <div class="card" onclick="this.classList.toggle('flipped')">
+        <div class="card-inner">
+          <div class="card-front">
+            <span class="card-number">2.</span>
+            กฎหมายวิธีสบัญญัติ คือ?
+          </div>
+          <div class="card-back">
+            <span class="card-number">2.</span>
+            กฎหมายขั้นตอนเพื่อใช้บังคับกฎหมายสารบัญญัติ
+          </div>
+        </div>
+      </div>
+
+      <div class="card" onclick="this.classList.toggle('flipped')">
+        <div class="card-inner">
+          <div class="card-front">
+            <span class="card-number">3.</span>
+            กฎหมายเอกชนคือ?
+          </div>
+          <div class="card-back">
+            <span class="card-number">3.</span>
+            กฎหมายประชาชนกับประชาชน / รัฐแบบเสมอกัน
+          </div>
+        </div>
+      </div>
+
+      <div class="card" onclick="this.classList.toggle('flipped')">
+        <div class="card-inner">
+          <div class="card-front">
+            <span class="card-number">4.</span>
+            สาขาของกฎหมายเอกชน?
+          </div>
+          <div class="card-back">
+            <span class="card-number">4.</span>
+            แพ่ง และ พาณิชย์
+          </div>
+        </div>
+      </div>
+
+      <div class="card" onclick="this.classList.toggle('flipped')">
+        <div class="card-inner">
+          <div class="card-front">
+            <span class="card-number">5.</span>
+            กฎหมายมหาชนคือ?
+          </div>
+          <div class="card-back">
+            <span class="card-number">5.</span>
+            รัฐมีอำนาจเหนือกว่าประชาชน
+          </div>
+        </div>
+      </div>
+
+      <div class="card" onclick="this.classList.toggle('flipped')">
+        <div class="card-inner">
+          <div class="card-front">
+            <span class="card-number">6.</span>
+            กฎหมายในหมวดมหาชน?
+          </div>
+          <div class="card-back">
+            <span class="card-number">6.</span>
+            รัฐธรรมนูญ, ปกครอง, อาญา, วิธีฯ, ศาลยุติธรรม
+          </div>
+        </div>
+      </div>
+
+      <div class="card" onclick="this.classList.toggle('flipped')">
+        <div class="card-inner">
+          <div class="card-front">
+            <span class="card-number">7.</span>
+            รัฐธรรมนูญไม่เป็นลายลักษณ์อักษร?
+          </div>
+          <div class="card-back">
+            <span class="card-number">7.</span>
+            รัฐธรรมนูญที่แก้ไขง่าย ไม่ตายตัว
+          </div>
+        </div>
+      </div>
+
+      <div class="card" onclick="this.classList.toggle('flipped')">
+        <div class="card-inner">
+          <div class="card-front">
+            <span class="card-number">8.</span>
+            การจัดระเบียบราชการมีกี่แบบ?
+          </div>
+          <div class="card-back">
+            <span class="card-number">8.</span>
+            ส่วนกลาง, ภูมิภาค, ท้องถิ่น
+          </div>
+        </div>
+      </div>
+
+      <div class="card" onclick="this.classList.toggle('flipped')">
+        <div class="card-inner">
+          <div class="card-front">
+            <span class="card-number">9.</span>
+            ทำไมบางคนไม่ถือว่ากฎหมายระหว่างประเทศเป็นกฎหมายจริง?
+          </div>
+          <div class="card-back">
+            <span class="card-number">9.</span>
+            เพราะไม่มีสภาพบังคับจริง แม้มีศาลโลก
+          </div>
+        </div>
+      </div>
+
+      <div class="card" onclick="this.classList.toggle('flipped')">
+        <div class="card-inner">
+          <div class="card-front">
+            <span class="card-number">10.</span>
+            สาขาของกฎหมายระหว่างประเทศ?
+          </div>
+          <div class="card-back">
+            <span class="card-number">10.</span>
+            คดีเมือง, คดีอาญา, คดีบุคคล
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
