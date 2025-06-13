@@ -39,7 +39,31 @@
       color: var(--primary-color);
       font-size: 2rem;
     }
-    
+    .backHome {
+  position: relative;
+  display: inline-block;
+  background-color: rgba(255, 255, 255, 0.25);
+  padding: var(--space-sm) var(--space-md);
+  color: #1e40af;
+  text-decoration: none;
+  font-weight: 700;
+  border-radius: var(--border-radius-md);
+  font-size: var(--text-lg);
+  transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+  margin-left: var(--space-sm);
+  box-shadow: 0 0 6px rgba(255, 255, 255, 0.4);
+  font-family: var(--font-headings);
+  cursor: pointer;
+  user-select: none;
+}
+
+.backHome:hover,
+.backHome:focus {
+  background-color: rgba(255, 255, 255, 0.4);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 15px rgba(255, 255, 255, 0.6);
+  outline: none;
+}
     .cards-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -154,6 +178,7 @@
 <body>
   <div class="container">
     <h1>การ์ดทบทวนกฎหมาย</h1>
+                <a href="/law-master-mk/index.html" class="backHome">กลับไปหน้าแรก</a>
     
     <div class="cards-grid">
       <!-- การ์ดตัวอย่าง -->
